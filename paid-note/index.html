@@ -41,7 +41,7 @@ body{background:radial-gradient(ellipse at 0 3%,#effaff 0,transparent 42%),radia
 <p class="intro">分かっているところだけで大丈夫。未定の部分はAIと相談して決められます。</p>
 <div class="field"><div class="label-line"><label for="theme">今回のテーマ</label></div><input type="text" id="theme" maxlength="400" placeholder="どんな有料noteを作りたい？"></div>
 <div class="field"><div class="label-line"><label for="audience">届けたい人</label></div><input type="text" id="audience" maxlength="500" placeholder="どんな人に読んでもらいたい？"></div>
-<div class="field"><div class="label-line"><label for="readerPain">その人が悩んでいること</label></div><textarea id="readerPain" rows="3" maxlength="3000" placeholder="どんな場面で困っている？　本当はどうなりたい？"></textarea></div>
+<div class="pattern-intro"><b>読者の悩みはAIが分析します</b><p>テーマ・届けたい人・参考資料から、悩んでいそうなことを3〜5案提案します。AIとの会話で選んだり直したりしてから、コンセプトづくりへ進みます。</p></div>
 <div class="field"><div class="label-line"><label for="material">伝えたいこと・記事の材料</label><span class="count" id="materialCount">0字</span></div><textarea id="material" rows="7" maxlength="40000" placeholder="知識や経験、教材の内容、書きたいことなど。箇条書きでも大丈夫です。"></textarea></div>
 </div>
  <div class="panel" id="panel-voice" role="tabpanel" aria-labelledby="tab-voice" hidden><div class="field"><div class="label-line"><label for="emoji">絵文字</label></div><select id="emoji"><option value="none">使わない</option><option value="few">少しだけ</option><option value="sample" selected>見本に合わせる</option></select></div>
@@ -120,7 +120,7 @@ function validate(d){const errors={};if(d.length==='custom'&&(!Number.isInteger(
 function generate(d){
   const errors=validate(d);if(Object.keys(errors).length)throw Error(Object.values(errors)[0]);
   const min=minimumLength(d),voiceData={...d,length:String(min),politeness:d.politeness||'sample',firstPerson:d.firstPerson||'見本に合わせる',emoji:d.emoji||'sample',tones:d.tones||[]};
-  const source={'テーマ':d.theme||'未定','届けたい人':d.audience||'未定','読者の悩み':d.readerPain||'未定','参考URL':d.sourceUrl||'なし','記事の材料（実体験・知識・参考資料）':d.material||'未入力','記事全体の希望':d.notes||'未入力'};
+  const source={'テーマ':d.theme||'未定','届けたい人':d.audience||'テーマや資料からAIが提案','読者の悩み':'テーマ・読者・資料からAIが分析して提案する','参考URL':d.sourceUrl||'なし','記事の材料（実体験・知識・参考資料）':d.material||'未入力','記事全体の希望':d.notes||'未入力'};
   return [
 `あなたは有料noteの企画・編集を一緒に進める日本語の編集者です。読者が「自分のことだ」と感じ、読後に具体的な一歩を実行できる記事を作ります。このチャットだけで、読者理解から企画・タイトル選び・本文完成まで進めてください。入力ツールへの再入力や、AIの返答をツールへ貼り戻す作業は求めません。画像生成は別の依頼で行います。`,
 `【今回の材料】
@@ -128,12 +128,15 @@ function generate(d){
 ${JSON.stringify(source,null,2)}
 文体の見本は後述の別枠にあります。今回の題材・読者・事実は上記の材料と、この依頼以降のユーザーの回答で決めます。別の記事・過去の商品の前提を勝手に持ち込まないでください。`,
 `【最初の返答と進め方】
-順番は「読者と悩みの整理 → コンセプト3案 → タイトル10案 → 構成 → 本文 → 最終原稿」です。最初の返答で全文・タイトル10案・すべての段階をまとめて出さないでください。
-・ターゲットと悩みが分からないときは、最初に「誰に届けたいか」「その人が何に悩んでいるか」を短く聞きます。既に入力された情報を聞き直さず、質問は一度に最大2つまで。迷っている場合は選びやすい候補を添えます。
-・材料が十分なら質問を増やさず、読者理解の要約とコンセプト3案を提示します。仮説は仮説と分かるようにし、本人の事実や研究結果として断定しません。
+順番は「AIによる読者の悩み分析 → 扱う悩みの確認 → コンセプト3案 → タイトル10案 → 構成 → 本文 → 最終原稿」です。最初の返答で全文・タイトル10案・すべての段階をまとめて出さないでください。
+・読者の悩みを考えるのはAIの役割です。「その人は何に悩んでいますか」とユーザーに分析を丸投げせず、悩みの入力を執筆準備の条件にしません。
+・テーマ・届けたい人・記事の材料・確認できた参考資料から、悩んでいそうなことを3〜5案分析して提示します。届けたい人が未定なら、まずテーマに合う読者像も仮説として提案します。
+・テーマも資料もなく分析の手がかりが全くない場合だけ、「どんなテーマや経験をnoteにしたいか」を一問で聞きます。既に入力された情報は聞き直しません。参考URLだけある場合は、まず閲覧を試し、開けなければ内容の貼り付けを求めます。
+・各案には「具体的に困る場面／表面の悩み／奥にある気持ちや願い／そう推測した手がかり／読後にできるようになりたいこと」を短く添えます。本人の事実・実際の調査結果・心理診断として断定せず、資料で分かる事実とAIの仮説を区別します。
+・最も記事の価値につながる推奨案を理由付きで示し、「この悩みを軸に進めてよいか、変えたいところはあるか」を確認します。ユーザーは選択・修正だけで進められるようにし、ここではまだコンセプト3案を出しません。ユーザーが事前に悩みを明示し、分析から企画まで任せると指定している場合は、その指定を優先します。
 ・各段階の採用・修正内容をこのチャット内で引き継ぎます。ユーザーが前段階の修正を求めたら、その修正を後続の設計に反映します。`,
 `【1. 読者理解とコンセプト】
-読者の属性、記事を探すきっかけ、表面の悩み、繰り返す行動、感情のループ、本当の願い、抵抗感、読後の理想を整理します。読者がスマホを開く場面、検索する言葉、誰にも言えない本音を具体化してください。ただし全項目を入力させる長い質問票にはしません。
+上の分析をユーザーが確認・修正したら、採用された悩みをもとに、読者の属性、記事を探すきっかけ、繰り返す行動、感情のループ、本当の願い、抵抗感、読後の理想を整理します。読者がスマホを開く場面、検索する言葉、誰にも言えない本音もAIが仮説として具体化してください。全項目を入力させる長い質問票にはしません。
 次に「現在地 → 繰り返す停滞 → 見落としている原因の仮説 → 新しい見方 → 読後にできる行動」を短くまとめ、記事が届ける中心的な変化を一つに絞ります。読者を責めず、代わりにできる行動を示します。
 方向性の異なるコンセプトを3案提示し、各案に「対象読者・中心的な気づき・有料部分で渡す具体物」を添えます。推奨案と理由も示してください。
 ここでコンセプトの選択・修正を待ちます。まだタイトル10案や本文には進みません。`,
@@ -180,7 +183,7 @@ voiceInstructions(voiceData,false),
 一括出力に収まらないときは、可能なら一つの編集可能な文書へ全章をまとめます。それもできない環境では、全文が揃ったように装わず、制約と分割箇所を原稿外に短く伝えます。
 この依頼では画像生成・noteへの入力・保存・公開を行いません。これらは別途依頼された場合だけ行います。`,
 `【今すぐ行うこと】
-上の材料を読み、最初の段階だけを始めてください。必要な読者情報が足りなければ短い質問を、十分なら読者理解の整理とコンセプト3案を出します。その後はユーザーの選択・修正を待ってください。`
+上の材料を読み、まずAIによる読者の悩み分析3〜5案と推奨案を出してください。ユーザーに悩みを考えて入力するよう求めないでください。手がかりが全くない場合だけテーマを一問で聞きます。分析案を出したら確認・修正を待ち、採用後にコンセプト3案へ進んでください。`
 ].join('\n\n');
 }
 function imagePrompt(d){
@@ -210,15 +213,15 @@ root.PaidNoteCore={generate,imagePrompt,validate};
 const $=id=>document.getElementById(id),steps=['material','voice','finish'];
 const draftKey='niji-paid-note.shell.draft.v1',voiceKey='niji-paid-note.shell.voice.v1';
 const voiceFields=['voiceSample','firstPerson','politeness','emoji','voiceNotes'];
-const fields=['sourceUrl','theme','audience','readerPain','material',...voiceFields,'notes','length','customLength','draftMode','imageCount','imageStyle','imageNotes'];
+const fields=['sourceUrl','theme','audience','material',...voiceFields,'notes','length','customLength','draftMode','imageCount','imageStyle','imageNotes'];
 let step=0,furthest=0,timer;
 function toast(t){$('toast').textContent=t;$('toast').hidden=false;clearTimeout(timer);timer=setTimeout(()=>$('toast').hidden=true,3500);}
 function read(keys=fields){const data={};for(const id of keys)data[id]=$(id).value;data.tones=[...document.querySelectorAll('input[name=tone]:checked')].map(e=>e.value);return data;}
-function restore(data,keys){if(!data||typeof data!=='object')return;for(const id of keys){const e=$(id),v=data[id];if(typeof v!=='string'||v.length>(e.maxLength>0?e.maxLength:40000))continue;if(e.tagName==='SELECT'&&![...e.options].some(o=>o.value===v))continue;e.value=v;}if(Array.isArray(data.tones))document.querySelectorAll('input[name=tone]').forEach(e=>e.checked=data.tones.includes(e.value));}
+function restore(data,keys){if(!data||typeof data!=='object')return;data={...data};if(keys.includes('material')&&typeof data.readerPain==='string'&&data.readerPain.trim()){data.material=[data.material,'読者についての補足（以前の入力）：'+data.readerPain].filter(Boolean).join('\n\n');}for(const id of keys){const e=$(id),v=data[id];if(typeof v!=='string'||v.length>(e.maxLength>0?e.maxLength:40000))continue;if(e.tagName==='SELECT'&&![...e.options].some(o=>o.value===v))continue;e.value=v;}if(Array.isArray(data.tones))document.querySelectorAll('input[name=tone]').forEach(e=>e.checked=data.tones.includes(e.value));}
 function counts(){for(const id of ['material','voiceSample'])$(id==='material'?'materialCount':'voiceCount').textContent=[...$(id).value].length.toLocaleString()+'字';$('customLengthField').hidden=$('length').value!=='custom';$('customLength').disabled=$('length').value!=='custom';}
 function move(index,focus=true){if(index<0||index>furthest||index>2)return;step=index;document.querySelectorAll('.tab').forEach((b,i)=>{b.disabled=i>furthest;b.setAttribute('aria-selected',String(i===step));b.tabIndex=i===step?0:-1;});document.querySelectorAll('.panel').forEach(p=>p.hidden=p.id!=='panel-'+steps[step]);$('previousStep').hidden=step===0;$('previousStep').textContent=step===2?'← ② わたしの文体へ':'← ① 記事の材料へ';$('nextStep').hidden=step===2;$('reviewSettings').hidden=step!==2;$('nextStep').textContent=step===0?'次へ：② わたしの文体 →':'次へ：③ 仕上げ →';$('stepHint').textContent=['1 / 3　記事の材料を整理したら、文体の設定へ。','2 / 3　自分らしい文章の見本と、語り方を設定します。','3 / 3　文章用と画像用の指示文を、別々に生成します。'][step];if(focus)$('tab-'+steps[step]).focus();}
 function next(){furthest=Math.max(furthest,Math.min(2,step+1));move(Math.min(2,step+1));$('editorTitle').scrollIntoView({block:'start'});}
-function review(){if(step!==2)return;const d=read(),errors=PaidNoteCore.validate(d);$('customLengthError').hidden=!errors.customLength;$('customLength').removeAttribute('aria-invalid');if(errors.customLength){$('customLengthError').textContent=errors.customLength;$('customLength').setAttribute('aria-invalid','true');$('customLength').focus();return;}$('articlePrompt').value=PaidNoteCore.generate(d);$('imagePrompt').value=PaidNoteCore.imagePrompt(d);$('copyArticle').disabled=false;$('copyImages').disabled=false;$('copyStatus').textContent='';const rows=[['テーマ',d.theme],['届けたい人',d.audience],['読者の悩み',d.readerPain],['最低文字数',(d.length==='custom'?d.customLength:d.length)+'字'],['本文の進め方',$('draftMode').selectedOptions[0].textContent],['参考URL',d.sourceUrl],['記事の材料',d.material],['文章の見本',d.voiceSample],['絵文字',$('emoji').selectedOptions[0].textContent],['一人称',d.firstPerson],['語り方',$('politeness').selectedOptions[0].textContent],['雰囲気',d.tones.join('・')],['文体のこだわり',d.voiceNotes],['記事全体の希望',d.notes],['画像の組み合わせ',$('imageCount').selectedOptions[0].textContent],['画風',d.imageStyle],['画像の希望',d.imageNotes]];$('reviewList').replaceChildren();for(const [label,value]of rows){const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value||'未入力';$('reviewList').append(dt,dd);}$('result').hidden=false;$('result').scrollIntoView({block:'start',behavior:'auto'});}
+function review(){if(step!==2)return;const d=read(),errors=PaidNoteCore.validate(d);$('customLengthError').hidden=!errors.customLength;$('customLength').removeAttribute('aria-invalid');if(errors.customLength){$('customLengthError').textContent=errors.customLength;$('customLength').setAttribute('aria-invalid','true');$('customLength').focus();return;}$('articlePrompt').value=PaidNoteCore.generate(d);$('imagePrompt').value=PaidNoteCore.imagePrompt(d);$('copyArticle').disabled=false;$('copyImages').disabled=false;$('copyStatus').textContent='';const rows=[['テーマ',d.theme],['届けたい人',d.audience],['読者の悩み','AIが分析して3〜5案を提案'],['最低文字数',(d.length==='custom'?d.customLength:d.length)+'字'],['本文の進め方',$('draftMode').selectedOptions[0].textContent],['参考URL',d.sourceUrl],['記事の材料',d.material],['文章の見本',d.voiceSample],['絵文字',$('emoji').selectedOptions[0].textContent],['一人称',d.firstPerson],['語り方',$('politeness').selectedOptions[0].textContent],['雰囲気',d.tones.join('・')],['文体のこだわり',d.voiceNotes],['記事全体の希望',d.notes],['画像の組み合わせ',$('imageCount').selectedOptions[0].textContent],['画風',d.imageStyle],['画像の希望',d.imageNotes]];$('reviewList').replaceChildren();for(const [label,value]of rows){const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value||'未入力';$('reviewList').append(dt,dd);}$('result').hidden=false;$('result').scrollIntoView({block:'start',behavior:'auto'});}
 $('nextStep').addEventListener('click',next);$('previousStep').addEventListener('click',()=>move(step-1));$('startSettings').addEventListener('click',()=>{move(0);$('editorTitle').scrollIntoView({block:'start'});});
 document.querySelectorAll('.tab').forEach((b,i)=>{b.addEventListener('click',()=>move(i));b.addEventListener('keydown',e=>{let n;if(e.key==='ArrowRight')n=Math.min(furthest,i+1);if(e.key==='ArrowLeft')n=Math.max(0,i-1);if(e.key==='Home')n=0;if(e.key==='End')n=furthest;if(n!==undefined){e.preventDefault();move(n);}});});
 $('builder').addEventListener('submit',e=>{e.preventDefault();step===2?review():next();});
