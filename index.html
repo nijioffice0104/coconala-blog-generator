@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="商品URLから、自分らしい文体と多彩な切り口のブログ用プロンプトを作成。">
-<title>ココナラブログジェネレーター｜虹オフィス</title>
+<title>ココナラブログジェネレーター</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23835cf0'/%3E%3Cpath d='M7 24V17a9 9 0 0 1 18 0v7' fill='none' stroke='%23f5bad6' stroke-width='3'/%3E%3Cpath d='M12 24V17a4 4 0 0 1 8 0v7' fill='none' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
 <style>
 :root{--ink:#292333;--muted:#736b7d;--purple:#50386d;--deep:#382c50;--line:#e5e1ea;--paper:#fff;--canvas:#f4f3f7;--accent:#b9532e;--tint:#f0ebf5;--shadow:0 10px 36px #28203708;--radius:18px}
@@ -28,7 +28,7 @@ body{background:radial-gradient(ellipse at 0 3%,#effaff 0,transparent 42%),radia
 </head>
 <body>
 <div class="shell">
-<header class="top"><div class="brand"><div class="office">虹オフィス 🌈</div><h1>ココナラブログジェネレーター</h1><p>商品の魅力を、あなたらしい言葉で。</p></div><div class="local-badge"><span class="status-dot" aria-hidden="true"></span>月額不要・登録不要</div></header>
+<header class="top"><div class="brand"><h1>ココナラブログジェネレーター</h1><p>商品の魅力を、あなたらしい言葉で。</p></div><div class="local-badge"><span class="status-dot" aria-hidden="true"></span>月額不要・登録不要</div></header>
 <section class="url-card" aria-labelledby="productTitle"><div><div class="eyebrow">まずは、ここから</div><h2 id="productTitle">紹介したい商品のURLを貼ってね</h2><p class="url-copy">同じ商品でも、伝え方はひとつじゃない。<br>読者に届く切り口と、自然な紹介文を考えましょう。</p></div><div class="url-entry"><label for="productUrl">ココナラの商品URL <span class="required" id="productRequired">必須</span></label><div class="url-input-row"><input id="productUrl" type="url" maxlength="2000" placeholder="https://coconala.com/services/…" autocomplete="off" spellcheck="false" aria-describedby="productHelp productUrlError"><button id="startSettings" class="url-go" type="button">① 記事の材料へ</button></div><p id="productHelp" class="hint">URLを確認して執筆する指示を作ります。商品の閲覧・文章の生成は、貼り付け先のAIで行います。</p><p class="field-error" id="productUrlError" hidden></p></div></section>
 <main class="layout">
 <section class="editor" aria-labelledby="editorTitle">
@@ -87,7 +87,7 @@ body{background:radial-gradient(ellipse at 0 3%,#effaff 0,transparent 42%),radia
  <section class="image-request-section" id="imageRequestSection" hidden><h3>画像生成プロンプト</h3><p class="hint">表紙・挿絵の指示を1つにまとめています。記事ができたら、同じChatGPTのチャットへ一度送るだけ。画像はそれぞれ別々に保存できるよう指示します。</p><div id="imagePromptCards"></div></section><div class="workflow"><span><b>1.</b> ③仕上げまで設定</span><span><b>2.</b> 指示文をコピー</span><span><b>3.</b> AIに貼り付ける</span></div>
 </section>
 </main>
-<footer class="footer"><p><span class="footer-brand">虹オフィス 🌈 · ココナラ非公式ツール</span><br>入力は外部に送信しません。文体と切り口の履歴は、このブラウザに保存します。<br>月額料金・会員登録・APIキー不要。文章・画像の生成は利用するAI側の条件に従います。</p><details><summary>参考にしたツールについて</summary><p>GAI JAPANの<a href="https://gaijp.com/Prompt/text_gene/" target="_blank" rel="noopener noreferrer">文書生成・校正・ゴーストライター</a>と<a href="https://gaijp.com/Prompt/kiji/index.html" target="_blank" rel="noopener noreferrer">記事プロンプトジェネレーター</a>の機能を参考に、独自の画面と指示文で制作しました。公式の統合版ではありません。</p></details></footer>
+<footer class="footer"><p><span class="footer-brand">ココナラ非公式ツール</span><br>入力は外部に送信しません。文体と切り口の履歴は、このブラウザに保存します。<br>月額料金・会員登録・APIキー不要。文章・画像の生成は利用するAI側の条件に従います。</p><details><summary>参考にしたツールについて</summary><p>GAI JAPANの<a href="https://gaijp.com/Prompt/text_gene/" target="_blank" rel="noopener noreferrer">文書生成・校正・ゴーストライター</a>と<a href="https://gaijp.com/Prompt/kiji/index.html" target="_blank" rel="noopener noreferrer">記事プロンプトジェネレーター</a>の機能を参考に、独自の画面と指示文で制作しました。公式の統合版ではありません。</p></details></footer>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <script id="prompt-core">
